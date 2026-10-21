@@ -45,7 +45,6 @@ export default function Navbar() {
     { name: 'Home', href: '/', icon: Home },
     { name: 'About Us', href: '/about', icon: BookOpen },
     { name: 'Activities & Impact', href: '/activities', icon: Sparkles },
-    { name: 'Grants & Sponsorships', href: '/grants-sponsorships', highlight: true, icon: HeartHandshake },
     { name: 'Gallery', href: '/gallery', icon: Layers },
     { name: 'Contact Us', href: '/contact', icon: Send }
   ];
@@ -111,11 +110,8 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`nav-item-link ${active ? 'active' : ''} ${link.highlight ? 'highlight' : ''}`}
+                    className={`nav-item-link ${active ? 'active' : ''}`}
                   >
-                    {link.highlight && (
-                      <Sparkles style={{ width: '0.85rem', height: '0.85rem', marginRight: '0.35rem', color: '#D4AF37' }} />
-                    )}
                     {link.name}
                   </Link>
                 );
@@ -246,7 +242,7 @@ export default function Navbar() {
                         style={{
                           width: '1.15rem',
                           height: '1.15rem',
-                          color: active ? '#FFFFFF' : link.highlight ? '#D4AF37' : '#94A3B8'
+                          color: active ? '#FFFFFF' : '#94A3B8'
                         }}
                       />
                       <span className="font-semibold text-sm">{link.name}</span>
