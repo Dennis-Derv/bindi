@@ -14,7 +14,7 @@ import {
   MessageSquare,
   Sparkles
 } from 'lucide-react';
-import { sendInquiryEmail } from '../../lib/inquiryEmail';
+import { sendInquiry } from '../../lib/inquiryEmail';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -26,26 +26,41 @@ export default function ContactPage() {
     message: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setResult(null);
 
-    sendInquiryEmail(
-      formData.subject || `Inquiry: ${formData.type}`,
+    const outcome = await sendInquiry(
       {
-        Name: formData.contactName,
-        Email: formData.email,
-        Phone: formData.phone,
-        'Inquiry Type': formData.type
+        subject: formData.subject || `Inquiry: ${formData.type}`,
+        name: formData.contactName,
+        email: formData.email,
+        message: formData.message,
+        details: {
+          Phone: formData.phone,
+          'Inquiry Type': formData.type
+        },
+        botcheck: new FormData(e.currentTarget).has('botcheck')
       },
-      formData.message
+      'Thank you for reaching out! Your message has been sent to Engr. Umar B. Bindir and the BKC secretariat. We will respond promptly.'
     );
 
-    setResult({
-      success: true,
-      message: 'Your email app should now open with your message addressed to the BKC secretariat. Just press send. If nothing opened, email us directly at ubindir@yahoo.com.'
-    });
+    setResult(outcome);
+    if (outcome.success) {
+      setFormData({
+        contactName: '',
+        email: '',
+        phone: '',
+        type: 'GENERAL',
+        subject: '',
+        message: ''
+      });
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -212,13 +227,16 @@ export default function ContactPage() {
                 >
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold">{result.success ? 'Email Draft Ready' : 'Notice'}</h5>
+                    <h5 className="font-bold">{result.success ? 'Message Sent' : 'Message Not Sent'}</h5>
                     <p className="text-xs mt-0.5 opacity-90">{result.message}</p>
                   </div>
                 </div>
               )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Honeypot: hidden from people, filled in by spam bots */}
+                <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" style={{ display: 'none' }} />
+
                 {/* 1. Name & Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -304,11 +322,18 @@ export default function ContactPage() {
                 {/* 5. Submit Button */}
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="btn btn-primary w-full py-3.5 font-bold text-sm shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2 disabled:opacity-50"
                   style={{ borderRadius: '0.75rem' }}
                 >
-                  <Send className="w-4 h-4" />
-                  <span>Send Message</span>
+                  {isSubmitting ? (
+                    'Sending Message...'
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>Send Message</span>
+                    </>
+                  )}
                 </button>
 
                 <p className="text-center text-xs text-slate-400 pt-1">

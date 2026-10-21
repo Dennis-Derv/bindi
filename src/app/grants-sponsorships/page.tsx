@@ -28,7 +28,7 @@ import {
   AlertCircle,
   HelpCircle
 } from 'lucide-react';
-import { sendInquiryEmail } from '../../lib/inquiryEmail';
+import { sendInquiry } from '../../lib/inquiryEmail';
 
 export default function GrantsSponsorshipsPage() {
   // Focus Initiatives with Auto-Generated Statements
@@ -137,6 +137,7 @@ export default function GrantsSponsorshipsPage() {
     message: 'We are exploring strategic co-funding with BKC International to convene, accredit, and train primary school headmasters across Northern Nigeria on modern school management, pedagogy, and digital leadership.'
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
     success: boolean;
     message: string;
@@ -245,26 +246,44 @@ export default function GrantsSponsorshipsPage() {
     }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitResult(null);
 
-    sendInquiryEmail(
-      formData.subject,
+    const outcome = await sendInquiry(
       {
-        Name: formData.contactName,
-        Organization: formData.organizationName,
-        Email: formData.email,
-        Phone: formData.phone,
-        'Inquiry Type': formData.type,
-        'Proposed Funding': formData.proposedFunding
+        subject: formData.subject,
+        name: formData.contactName,
+        email: formData.email,
+        message: formData.message,
+        details: {
+          Organization: formData.organizationName,
+          Phone: formData.phone,
+          'Inquiry Type': formData.type,
+          'Proposed Funding': formData.proposedFunding
+        },
+        botcheck: new FormData(e.currentTarget).has('botcheck')
       },
-      formData.message
+      'Thank you! Your grant/sponsorship inquiry has been received. Our leadership will review your proposal and respond promptly.'
     );
 
-    setSubmitResult({
-      success: true,
-      message: 'Your email app should now open with your proposal addressed to BKC leadership. Just press send. If nothing opened, email us directly at ubindir@yahoo.com.'
-    });
+    setSubmitResult(outcome);
+    if (outcome.success) {
+      setFormData({
+        organizationName: '',
+        contactName: '',
+        email: '',
+        phone: '',
+        type: 'GRANT',
+        proposedFunding: '$50,000 – $100,000',
+        subject: focusInitiatives[0].subject,
+        message: focusInitiatives[0].brief
+      });
+      setSelectedInitiative('headmasters');
+      setSelectedObjectives([]);
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -760,13 +779,16 @@ export default function GrantsSponsorshipsPage() {
                       <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
                     )}
                     <div>
-                      <h5 className="font-bold">{submitResult.success ? 'Email Draft Ready' : 'Notice'}</h5>
+                      <h5 className="font-bold">{submitResult.success ? 'Inquiry Successfully Received' : 'Inquiry Not Sent'}</h5>
                       <p className="text-xs mt-0.5 opacity-90">{submitResult.message}</p>
                     </div>
                   </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Honeypot: hidden from people, filled in by spam bots */}
+                  <input type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" style={{ display: 'none' }} />
+
                   {/* Row 1: Full Name & Organization */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -884,11 +906,18 @@ export default function GrantsSponsorshipsPage() {
                   <div className="pt-2">
                     <button
                       type="submit"
+                      disabled={isSubmitting}
                       className="btn btn-primary w-full py-3.5 font-bold text-sm shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2 disabled:opacity-50"
                       style={{ borderRadius: '0.75rem' }}
                     >
-                      <Send className="w-4 h-4" />
-                      <span>Submit Proposal Inquiry</span>
+                      {isSubmitting ? (
+                        'Submitting Inquiry...'
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Submit Proposal Inquiry</span>
+                        </>
+                      )}
                     </button>
                   </div>
 
