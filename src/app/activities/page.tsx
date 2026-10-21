@@ -11,7 +11,6 @@ import {
   MapPin,
   ShieldCheck,
   CheckCircle2,
-  Download,
   GraduationCap,
   Laptop,
   ArrowRight
@@ -75,15 +74,6 @@ export default async function ActivitiesPage({ searchParams }: PageProps) {
                 >
                   <span>Explore Activities Catalog</span>
                   <ArrowRight className="w-4 h-4" />
-                </a>
-
-                <a
-                  href="/BKC Brief on BKC for Grants Application.pdf"
-                  download
-                  className="btn btn-secondary py-3.5 px-5 text-sm font-semibold flex items-center justify-center gap-2 w-full sm:w-auto text-center"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download Illustrated Brief (PDF)</span>
                 </a>
               </div>
 

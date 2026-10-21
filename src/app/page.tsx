@@ -496,13 +496,6 @@ export default function HomePage() {
                 <HeartHandshake className="w-5 h-5" />
                 Explore Grant Opportunities
               </Link>
-              <a
-                href="/BKC Brief on BKC for Grants Application.pdf"
-                download
-                className="btn btn-secondary text-sm sm:text-base py-3.5 px-6 w-full sm:w-auto text-center justify-center"
-              >
-                Download Official BKC Brief (PDF)
-              </a>
             </div>
           </div>
         </div>

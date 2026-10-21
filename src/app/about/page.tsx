@@ -296,13 +296,6 @@ export default function AboutPage() {
               </div>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
-                <a
-                  href="/BKC Brief on BKC for Grants Application.pdf"
-                  download
-                  className="btn btn-primary text-xs font-bold w-full sm:w-auto text-center justify-center min-h-[44px]"
-                >
-                  Download Full Brief PDF (with CAC Scan)
-                </a>
                 <Link href="/grants-sponsorships" className="btn btn-secondary text-xs w-full sm:w-auto text-center justify-center min-h-[44px]">
                   Review Grant Application Criteria
                 </Link>

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {
   ShieldCheck,
   HeartHandshake,
-  Download,
   CheckCircle2,
   Send,
   Building2,
@@ -320,15 +319,6 @@ export default function GrantsSponsorshipsPage() {
                 >
                   <Send className="w-4 h-4" />
                   <span>Submit Funding Proposal</span>
-                </a>
-
-                <a
-                  href="/BKC Brief on BKC for Grants Application.pdf"
-                  download
-                  className="btn btn-secondary py-3.5 px-5 text-sm font-semibold flex items-center justify-center gap-2 w-full sm:w-auto text-center"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download Grant Brief (PDF)</span>
                 </a>
 
                 <a
@@ -719,15 +709,6 @@ export default function GrantsSponsorshipsPage() {
 
                 {/* Pill Buttons */}
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-1">
-                  <a
-                    href="/BKC Brief on BKC for Grants Application.pdf"
-                    download
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#10B981] hover:bg-[#059669] text-slate-950 font-bold text-xs transition-all shadow-lg shadow-emerald-500/30"
-                  >
-                    <span>Download Brief</span>
-                    <span className="w-3.5 h-3.5 rounded-full bg-slate-950/20 flex items-center justify-center text-[9px]">▶</span>
-                  </a>
-
                   <a
                     href="/about"
                     className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-slate-950/60 hover:bg-slate-900 text-white font-semibold text-xs border border-white/15 transition-all backdrop-blur-md shadow-md"

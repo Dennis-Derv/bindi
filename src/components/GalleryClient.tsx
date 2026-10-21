@@ -12,7 +12,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  Download,
   HeartHandshake,
   Play,
   Pause,
@@ -515,14 +514,6 @@ export default function GalleryClient({ initialMedia = [] }: GalleryClientProps)
           </div>
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <a
-              href="/BKC Brief on BKC for Grants Application.pdf"
-              download
-              className="btn btn-secondary py-3 px-5 text-xs font-bold flex items-center gap-2"
-            >
-              <Download className="w-4 h-4" />
-              Download Full Illustrated Brief (PDF)
-            </a>
             <Link
               href="/grants-sponsorships"
               className="btn btn-primary py-3 px-5 text-xs font-bold flex items-center gap-2 shadow-lg shadow-amber-500/25"
