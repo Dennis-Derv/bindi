@@ -17,13 +17,11 @@ import {
 } from 'lucide-react';
 import ImpactCounters from '../components/ImpactCounters';
 import ActivityCard from '../components/ActivityCard';
-import { dbStore } from '../../server/src/services/store';
+import { getActivities, getStats } from '../data/content';
 
-export const dynamic = 'force-dynamic';
-
-export default async function HomePage() {
-  const activities = await dbStore.getActivities({ publishedOnly: true });
-  const stats = await dbStore.getStats();
+export default function HomePage() {
+  const activities = getActivities({ publishedOnly: true });
+  const stats = getStats();
 
   // Featured flagship projects
   const featuredActivities = activities.slice(0, 3);
@@ -342,7 +340,7 @@ export default async function HomePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {featuredActivities.map((act) => (
-            <ActivityCard key={act.id} activity={act as any} />
+            <ActivityCard key={act.id} activity={act} />
           ))}
         </div>
       </section>

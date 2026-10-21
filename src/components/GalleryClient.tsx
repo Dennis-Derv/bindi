@@ -43,31 +43,16 @@ interface GalleryClientProps {
 }
 
 export default function GalleryClient({ initialMedia = [] }: GalleryClientProps) {
-  const [mediaList, setMediaList] = useState<MediaItem[]>(initialMedia);
+  const mediaList = initialMedia;
   const [activeType, setActiveType] = useState<'ALL' | 'IMAGE' | 'VIDEO'>('ALL');
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const [loading, setLoading] = useState(initialMedia.length === 0);
 
   // Carousel State
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (initialMedia.length === 0) {
-      fetch('/api/media')
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success && Array.isArray(data.data)) {
-            setMediaList(data.data);
-          }
-        })
-        .catch((err) => console.warn('Could not fetch media list:', err))
-        .finally(() => setLoading(false));
-    }
-  }, [initialMedia]);
 
   // Curated Featured Carousel Items (Flagship photos)
   const featuredSlides = useMemo(() => {
@@ -412,12 +397,7 @@ export default function GalleryClient({ initialMedia = [] }: GalleryClientProps)
 
       {/* 4. SOPHISTICATED BENTO / EDITORIAL GALLERY GRID */}
       <section className="container">
-        {loading ? (
-          <div className="text-center py-24 text-slate-400 space-y-3">
-            <div className="w-10 h-10 border-2 border-[#F59E0B] border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-sm font-medium">Loading high-resolution photographic archive...</p>
-          </div>
-        ) : filteredMedia.length === 0 ? (
+        {filteredMedia.length === 0 ? (
           <div className="bkc-card text-center py-16 px-6 space-y-4 max-w-md mx-auto">
             <Filter className="w-10 h-10 text-slate-500 mx-auto" />
             <h4 className="text-lg font-bold text-white font-['Outfit']">

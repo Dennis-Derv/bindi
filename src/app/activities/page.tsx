@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { dbStore } from '../../../server/src/services/store';
+import { categories as allCategories, getActivities } from '../../data/content';
 import ActivityCard from '../../components/ActivityCard';
 import {
   Search,
@@ -16,8 +16,6 @@ import {
   Laptop,
   ArrowRight
 } from 'lucide-react';
-
-export const dynamic = 'force-dynamic';
 
 interface PageProps {
   searchParams: Promise<{
@@ -36,8 +34,8 @@ export default async function ActivitiesPage({ searchParams }: PageProps) {
   const currentCategory = resolvedParams.category || '';
   const searchQuery = resolvedParams.search || '';
 
-  const categories = await dbStore.getCategories();
-  const activities = await dbStore.getActivities({
+  const categories = allCategories;
+  const activities = getActivities({
     categorySlug: currentCategory || undefined,
     search: searchQuery || undefined,
     publishedOnly: true
@@ -324,7 +322,7 @@ export default async function ActivitiesPage({ searchParams }: PageProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {activities.map((act) => (
-                <ActivityCard key={act.id} activity={act as any} />
+                <ActivityCard key={act.id} activity={act} />
               ))}
             </div>
           </div>

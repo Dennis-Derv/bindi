@@ -14,11 +14,6 @@ import {
 export default function MobileBottomNav() {
   const pathname = usePathname();
 
-  // If on admin routes, do not render mobile dock
-  if (pathname?.startsWith('/admin')) {
-    return null;
-  }
-
   const navItems = [
     {
       name: 'Home',

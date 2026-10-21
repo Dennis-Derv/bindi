@@ -28,6 +28,7 @@ import {
   AlertCircle,
   HelpCircle
 } from 'lucide-react';
+import { sendInquiryEmail } from '../../lib/inquiryEmail';
 
 export default function GrantsSponsorshipsPage() {
   // Focus Initiatives with Auto-Generated Statements
@@ -136,7 +137,6 @@ export default function GrantsSponsorshipsPage() {
     message: 'We are exploring strategic co-funding with BKC International to convene, accredit, and train primary school headmasters across Northern Nigeria on modern school management, pedagogy, and digital leadership.'
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
     success: boolean;
     message: string;
@@ -245,50 +245,26 @@ export default function GrantsSponsorshipsPage() {
     }
   ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitResult(null);
 
-    try {
-      const res = await fetch('/api/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      const data = await res.json();
+    sendInquiryEmail(
+      formData.subject,
+      {
+        Name: formData.contactName,
+        Organization: formData.organizationName,
+        Email: formData.email,
+        Phone: formData.phone,
+        'Inquiry Type': formData.type,
+        'Proposed Funding': formData.proposedFunding
+      },
+      formData.message
+    );
 
-      if (res.ok && data.success) {
-        setSubmitResult({
-          success: true,
-          message: 'Thank you! Your grant/sponsorship inquiry has been received. Our leadership will review your proposal and respond promptly.'
-        });
-        setFormData({
-          organizationName: '',
-          contactName: '',
-          email: '',
-          phone: '',
-          type: 'GRANT',
-          proposedFunding: '$50,000 – $100,000',
-          subject: focusInitiatives[0].subject,
-          message: focusInitiatives[0].brief
-        });
-        setSelectedInitiative('headmasters');
-        setSelectedObjectives([]);
-      } else {
-        setSubmitResult({
-          success: false,
-          message: data.message || 'Failed to submit proposal. Please check all fields and try again.'
-        });
-      }
-    } catch {
-      setSubmitResult({
-        success: false,
-        message: 'Network error. Please try again or email us directly at ubindir@yahoo.com.'
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    setSubmitResult({
+      success: true,
+      message: 'Your email app should now open with your proposal addressed to BKC leadership. Just press send. If nothing opened, email us directly at ubindir@yahoo.com.'
+    });
   };
 
   return (
@@ -784,7 +760,7 @@ export default function GrantsSponsorshipsPage() {
                       <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
                     )}
                     <div>
-                      <h5 className="font-bold">{submitResult.success ? 'Inquiry Successfully Received' : 'Notice'}</h5>
+                      <h5 className="font-bold">{submitResult.success ? 'Email Draft Ready' : 'Notice'}</h5>
                       <p className="text-xs mt-0.5 opacity-90">{submitResult.message}</p>
                     </div>
                   </div>
@@ -908,18 +884,11 @@ export default function GrantsSponsorshipsPage() {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      disabled={isSubmitting}
                       className="btn btn-primary w-full py-3.5 font-bold text-sm shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2 disabled:opacity-50"
                       style={{ borderRadius: '0.75rem' }}
                     >
-                      {isSubmitting ? (
-                        'Submitting Inquiry...'
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4" />
-                          <span>Submit Proposal Inquiry</span>
-                        </>
-                      )}
+                      <Send className="w-4 h-4" />
+                      <span>Submit Proposal Inquiry</span>
                     </button>
                   </div>
 

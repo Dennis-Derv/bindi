@@ -11,7 +11,6 @@ import {
   ShieldCheck,
   ChevronRight,
   Sparkles,
-  Lock,
   Phone,
   Mail,
   MapPin,
@@ -74,14 +73,6 @@ export default function Navbar() {
             <span>
               📍 No 12 Mallum Hamid St, Yola Town, Adamawa State
             </span>
-            <Link
-              href="/admin"
-              className="flex items-center gap-1 text-slate-300 hover:text-white"
-              style={{ transition: 'color 0.2s' }}
-            >
-              <Lock style={{ width: '0.75rem', height: '0.75rem' }} />
-              Admin Portal
-            </Link>
           </div>
         </div>
       </div>
@@ -303,14 +294,6 @@ export default function Navbar() {
                   <MapPin style={{ width: '0.8rem', height: '0.8rem', color: '#D4AF37' }} />
                   Yola Town Campus
                 </span>
-                <Link
-                  href="/admin"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-1 text-slate-400 hover:text-white"
-                >
-                  <Lock style={{ width: '0.75rem', height: '0.75rem' }} />
-                  Admin Sign In
-                </Link>
               </div>
             </div>
           </div>

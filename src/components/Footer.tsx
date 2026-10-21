@@ -7,7 +7,6 @@ import {
   Mail,
   Phone,
   ArrowUpRight,
-  Lock,
   Heart
 } from 'lucide-react';
 
@@ -169,17 +168,6 @@ export default function Footer() {
                 <Mail style={{ width: '0.75rem', height: '0.75rem' }} />
                 <span>Email Us</span>
               </a>
-            </div>
-
-            <div style={{ marginTop: '1.25rem', paddingTop: '0.85rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-              <Link
-                href="/admin/login"
-                className="inline-flex items-center gap-1.5"
-                style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600 }}
-              >
-                <Lock style={{ width: '0.85rem', height: '0.85rem' }} />
-                Staff / Admin Sign In
-              </Link>
             </div>
           </div>
         </div>

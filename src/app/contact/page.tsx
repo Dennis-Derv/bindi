@@ -14,6 +14,7 @@ import {
   MessageSquare,
   Sparkles
 } from 'lucide-react';
+import { sendInquiryEmail } from '../../lib/inquiryEmail';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -25,52 +26,26 @@ export default function ContactPage() {
     message: ''
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setResult(null);
 
-    try {
-      const res = await fetch('/api/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          subject: formData.subject || `Inquiry: ${formData.type}`
-        })
-      });
-      const data = await res.json();
+    sendInquiryEmail(
+      formData.subject || `Inquiry: ${formData.type}`,
+      {
+        Name: formData.contactName,
+        Email: formData.email,
+        Phone: formData.phone,
+        'Inquiry Type': formData.type
+      },
+      formData.message
+    );
 
-      if (res.ok && data.success) {
-        setResult({
-          success: true,
-          message: 'Thank you for reaching out! Your message has been sent to Engr. Umar B. Bindir and the BKC secretariat. We will respond promptly.'
-        });
-        setFormData({
-          contactName: '',
-          email: '',
-          phone: '',
-          type: 'GENERAL',
-          subject: '',
-          message: ''
-        });
-      } else {
-        setResult({
-          success: false,
-          message: data.message || 'Error submitting message. Please check all fields and try again.'
-        });
-      }
-    } catch (err) {
-      setResult({
-        success: false,
-        message: 'Network error. Please try again or reach out directly to ubindir@yahoo.com.'
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    setResult({
+      success: true,
+      message: 'Your email app should now open with your message addressed to the BKC secretariat. Just press send. If nothing opened, email us directly at ubindir@yahoo.com.'
+    });
   };
 
   return (
@@ -237,7 +212,7 @@ export default function ContactPage() {
                 >
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
-                    <h5 className="font-bold">{result.success ? 'Message Delivered' : 'Notice'}</h5>
+                    <h5 className="font-bold">{result.success ? 'Email Draft Ready' : 'Notice'}</h5>
                     <p className="text-xs mt-0.5 opacity-90">{result.message}</p>
                   </div>
                 </div>
@@ -329,18 +304,11 @@ export default function ContactPage() {
                 {/* 5. Submit Button */}
                 <button
                   type="submit"
-                  disabled={isSubmitting}
                   className="btn btn-primary w-full py-3.5 font-bold text-sm shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2 disabled:opacity-50"
                   style={{ borderRadius: '0.75rem' }}
                 >
-                  {isSubmitting ? (
-                    'Sending Message...'
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" />
-                      <span>Send Message</span>
-                    </>
-                  )}
+                  <Send className="w-4 h-4" />
+                  <span>Send Message</span>
                 </button>
 
                 <p className="text-center text-xs text-slate-400 pt-1">

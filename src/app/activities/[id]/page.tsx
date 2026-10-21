@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { dbStore } from '../../../../server/src/services/store';
+import { getActivityByIdOrSlug } from '../../../data/content';
 import {
   Calendar,
   MapPin,
@@ -13,8 +13,6 @@ import {
   CheckCircle2
 } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
-
 interface PageProps {
   params: Promise<{
     id: string;
@@ -23,7 +21,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { id } = await params;
-  const activity = await dbStore.getActivityByIdOrSlug(id);
+  const activity = getActivityByIdOrSlug(id);
   if (!activity) return { title: 'Activity Not Found | BKC' };
 
   return {
@@ -34,7 +32,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function SingleActivityPage({ params }: PageProps) {
   const { id } = await params;
-  const activity = await dbStore.getActivityByIdOrSlug(id);
+  const activity = getActivityByIdOrSlug(id);
 
   if (!activity) {
     notFound();
