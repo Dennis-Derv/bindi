@@ -24,10 +24,10 @@ import {
   Clock,
   Layers,
   MessageSquare,
-  AlertCircle,
   HelpCircle
 } from 'lucide-react';
 import { sendInquiry } from '../../lib/inquiryEmail';
+import FormStatusModal from '../../components/FormStatusModal';
 
 export default function GrantsSponsorshipsPage() {
   // Focus Initiatives with Auto-Generated Statements
@@ -287,6 +287,13 @@ export default function GrantsSponsorshipsPage() {
 
   return (
     <div className="space-y-18 sm:space-y-24 pb-14 sm:pb-20 lg:pb-24">
+      <FormStatusModal
+        result={submitResult}
+        successTitle="Inquiry Successfully Received"
+        errorTitle="Inquiry Not Sent"
+        onClose={() => setSubmitResult(null)}
+      />
+
       {/* 1. SOPHISTICATED HERO SECTION FOR FUNDERS & SPONSORS */}
       <section className="relative pt-8 sm:pt-12 lg:pt-16 pb-16 sm:pb-20 lg:pb-24 overflow-hidden border-b border-[rgba(255,255,255,0.08)] bg-gradient-to-b from-[#0B1E3A] via-[#06142B] to-[#040B18]">
         {/* Ambient Glows */}
@@ -745,26 +752,6 @@ export default function GrantsSponsorshipsPage() {
                     Quick, non-binding proposal submission. Direct review by Founder &amp; Trustees.
                   </p>
                 </div>
-
-                {submitResult && (
-                  <div
-                    className={`p-4 rounded-xl text-sm font-medium border flex items-start gap-3 ${
-                      submitResult.success
-                        ? 'bg-emerald-950/70 border-emerald-500/60 text-emerald-200'
-                        : 'bg-red-950/70 border-red-500/60 text-red-200'
-                    }`}
-                  >
-                    {submitResult.success ? (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                    ) : (
-                      <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-                    )}
-                    <div>
-                      <h5 className="font-bold">{submitResult.success ? 'Inquiry Successfully Received' : 'Inquiry Not Sent'}</h5>
-                      <p className="text-xs mt-0.5 opacity-90">{submitResult.message}</p>
-                    </div>
-                  </div>
-                )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* Honeypot: hidden from people, filled in by spam bots */}

@@ -9,12 +9,12 @@ import {
   Clock,
   Send,
   ShieldCheck,
-  CheckCircle2,
   Building2,
   MessageSquare,
   Sparkles
 } from 'lucide-react';
 import { sendInquiry } from '../../lib/inquiryEmail';
+import FormStatusModal from '../../components/FormStatusModal';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -65,6 +65,13 @@ export default function ContactPage() {
 
   return (
     <div className="space-y-16 sm:space-y-20 pb-14 sm:pb-20 lg:pb-24">
+      <FormStatusModal
+        result={result}
+        successTitle="Message Sent"
+        errorTitle="Message Not Sent"
+        onClose={() => setResult(null)}
+      />
+
       {/* 1. HERO SECTION WITH AUTHENTIC CAMPUS BACKGROUND IMAGE */}
       <section
         className="relative pt-8 sm:pt-12 lg:pt-16 pb-16 sm:pb-20 lg:pb-24 overflow-hidden border-b border-[rgba(255,255,255,0.1)]"
@@ -216,22 +223,6 @@ export default function ContactPage() {
                   Fill out this quick form and our leadership team will respond directly.
                 </p>
               </div>
-
-              {result && (
-                <div
-                  className={`p-4 rounded-xl text-sm font-medium border flex items-start gap-3 ${
-                    result.success
-                      ? 'bg-emerald-950/70 border-emerald-500/60 text-emerald-200'
-                      : 'bg-red-950/70 border-red-500/60 text-red-200'
-                  }`}
-                >
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                  <div>
-                    <h5 className="font-bold">{result.success ? 'Message Sent' : 'Message Not Sent'}</h5>
-                    <p className="text-xs mt-0.5 opacity-90">{result.message}</p>
-                  </div>
-                </div>
-              )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Honeypot: hidden from people, filled in by spam bots */}
